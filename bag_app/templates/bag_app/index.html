@@ -1,0 +1,86 @@
+
+{% load dict_key %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <style>
+        body{
+            background: rgb(30, 28, 38);
+            color: white;
+        }
+
+        .bag-wrapper{
+            position: relative;
+            display: inline-block; 
+            width: 400px;
+            height: 400px;
+        }
+        a:visited{
+            color: yellow;
+        }
+        .bag-wrapper ul{
+            list-style-type: none;
+        }
+
+        h1{
+            text-align: center;
+        }
+        h2{
+            text-align: center;
+            vertical-align: middle;
+            position: absolute;
+            left: 50%;
+            top:45%;
+            transform: translate(-50%, -50%);
+            opacity: 0.85;
+        }
+        
+        .grid-container{
+            position: relative;
+            /*display: inline-grid;
+            grid-template-columns: auto auto auto;
+            column-gap: 10px;
+            row-gap: 5px; */
+        }
+
+        .grid-item:hover{
+            transform: scale(1.2);
+        }
+
+        .bags{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>BRAIN BAG</h1>
+    <div style="display: flex; justify-content:center; align-items: center;">
+        <a href="{% url 'create' %}">Start a new BAG</a>
+        <p>-or-</p>
+        <a href="{% url 'create-term' %}"> Add new item to bag</a>
+    </div>
+    <div class="bags">
+    {% for bag in bags %}
+        <div class="bag-wrapper" >
+            <h2> {{ bag.name | title }}</h2>
+            <svg width="400" height="400" style="position: absolute; left: 50%; transform: translateX(-50%);">
+                <circle cx="200" cy="200" r="190" stroke="red" stroke-width="2" fill="transparent" />
+            </svg>
+            <ul class="grid-container">
+            {% for term in bag.term_set.all %}
+                <li class="grid-item" style="position: absolute;{{term_coords|dict_key:term.id}}">
+                    {% if term.url != "" %}
+                        <a href="{{ term.url }}"> {{ term.name }}</a>
+                    {% else %}
+                    {{ term.name }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    </body>
+</html>
