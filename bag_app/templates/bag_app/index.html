@@ -71,11 +71,20 @@
             <ul class="grid-container">
             {% for term in bag.term_set.all %}
                 <li class="grid-item" style="position: absolute;{{term_coords|dict_key:term.id}}">
-                    {% if term.url != "" %}
-                        <a href="{{ term.url }}"> {{ term.name }}</a>
-                    {% else %}
-                    {{ term.name }}
-                    {% endif %}
+                    <span>
+                        {% if term.url != "" %}
+                            <a href="{{ term.url }}"> {{ term.name }}</a>
+                        {% else %}
+                        {{ term.name }}
+                        {% endif %}
+                    </span>
+                    <span><a href="{% url 'edit-term' term.id %}">️✏</a></span>
+                    <span>
+                        <form action="{% url 'delete-term' term.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" value="X" style="color: red; font-weight: bold;padding: 5px" />
+                        </form>
+                    </span>
                 </li>
             {% endfor %}
             </ul>
