@@ -38,8 +38,8 @@
     </aside>
     <aside class="bag-actions">
         <h2 class="bag-actions__title">Actions</h2>
-        <a class="bag-actions_add" href="{% url 'create' %}">Create bag</a>
-        <a href="{% url 'create-term' %}"> New Term</a>
+        <a class="bag-actions_add" href="{% url 'bags:add-bag' %}">Create bag</a>
+        <a href="{% url 'bags:add-term' %}"> New Term</a>
         <a class="bag-actions__toggle" href="#">Show/hide disabled bags</a>        
         <a class="bag-actions__search" href="#">Filter by bag name</a>
     </aside>
@@ -59,9 +59,9 @@
                         {{ term.name }}
                         {% endif %}
                     </span>
-                    <span><a href="{% url 'edit-term' term.id %}">️<span class="material-symbols-outlined">edit</span></a></span>
+                    <span><a href="{% url 'bags:update-term' term.id %}">️<span class="material-symbols-outlined">edit</span></a></span>
                     <span>
-                        <form action="{% url 'delete-term' term.id %}" method="POST">
+                        <form action="{% url 'bags:delete-term' term.id %}" method="POST">
                             {% csrf_token %}
                             <button type="submit" class="btn-delete-term"><span class="material-symbols-outlined red">delete</span><</button>
                         </form>
