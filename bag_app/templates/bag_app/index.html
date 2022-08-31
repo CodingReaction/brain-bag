@@ -1,76 +1,57 @@
 
 {% load dict_key %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-        body{
-            background: rgb(30, 28, 38);
-            color: white;
-        }
-
-        .bag-wrapper{
-            position: relative;
-            display: inline-block; 
-            width: 400px;
-            height: 400px;
-        }
-        a:visited{
-            color: yellow;
-        }
-        .bag-wrapper ul{
-            list-style-type: none;
-        }
-
-        h1{
-            text-align: center;
-        }
-        h2{
-            text-align: center;
-            vertical-align: middle;
-            position: absolute;
-            left: 50%;
-            top:45%;
-            transform: translate(-50%, -50%);
-            opacity: 0.85;
-        }
-        
-        .grid-container{
-            position: relative;
-            /*display: inline-grid;
-            grid-template-columns: auto auto auto;
-            column-gap: 10px;
-            row-gap: 5px; */
-        }
-
-        .grid-item:hover{
-            transform: scale(1.2);
-        }
-
-        .bags{
-            display: flex;
-            justify-content: center;
+        /* Custom Material Icon rules */
+        .material-symbols-outlined.red{ color: red;}
+        .material-symbols-outlined.md-400{font-size: 400px;}
+    </style>
+    <style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 48
         }
     </style>
+    <link rel="stylesheet" href="{% static 'bag_app/styles.css' %}" />
 </head>
 <body>
-    <h1>BRAIN BAG</h1>
-    <div style="display: flex; justify-content:center; align-items: center;">
-        <a href="{% url 'create' %}">Start a new BAG</a>
-        <p>-or-</p>
-        <a href="{% url 'create-term' %}"> Add new item to bag</a>
-    </div>
+    <div class="fixed-animated-bg"></div>
+    <header class="main-header">
+        <h1 class="main-header__title">BRAIN BAG</h1>
+        <nav class="main-header__nav">
+        </nav>
+    </header>
+    <aside class="collections">
+        <a class="collections__add">C</a>
+        <hr/>
+        <a class="collections__item">A</a>
+        <a class="collections__item">B</a>
+    </aside>
+    <aside class="bag-actions">
+        <h2 class="bag-actions__title">Actions</h2>
+        <a class="bag-actions_add" href="{% url 'create' %}">Create bag</a>
+        <a href="{% url 'create-term' %}"> New Term</a>
+        <a class="bag-actions__toggle" href="#">Show/hide disabled bags</a>        
+        <a class="bag-actions__search" href="#">Filter by bag name</a>
+    </aside>
     <div class="bags">
     {% for bag in bags %}
-        <div class="bag-wrapper" >
-            <h2> {{ bag.name | title }}</h2>
-            <svg width="400" height="400" style="position: absolute; left: 50%; transform: translateX(-50%);">
-                <circle cx="200" cy="200" r="190" stroke="red" stroke-width="2" fill="transparent" />
-            </svg>
-            <ul class="grid-container">
+        <div class="bag" >
+            <h2 class="bag__name"> {{ bag.name | title }}</h2>
+            <a class="bag__add-term" href="#"><span class="material-icons">add_circle</span></a>
+            <span alt="Bag svg" class="bag__svg material-symbols-outlined md-400" style="color: gold;">work</span>
+            <ul class="bag__terms">
             {% for term in bag.term_set.all %}
-                <li class="grid-item" style="position: absolute;{{term_coords|dict_key:term.id}}">
+                <li class="bag__terms__item" >
                     <span>
                         {% if term.url != "" %}
                             <a href="{{ term.url }}"> {{ term.name }}</a>
@@ -78,11 +59,11 @@
                         {{ term.name }}
                         {% endif %}
                     </span>
-                    <span><a href="{% url 'edit-term' term.id %}">️✏</a></span>
+                    <span><a href="{% url 'edit-term' term.id %}">️<span class="material-symbols-outlined">edit</span></a></span>
                     <span>
                         <form action="{% url 'delete-term' term.id %}" method="POST">
                             {% csrf_token %}
-                            <input type="submit" value="X" style="color: red; font-weight: bold;padding: 5px" />
+                            <button type="submit" class="btn-delete-term"><span class="material-symbols-outlined red">delete</span><</button>
                         </form>
                     </span>
                 </li>
