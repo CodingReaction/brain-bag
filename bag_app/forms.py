@@ -1,11 +1,8 @@
 from django import forms
 from .models import Bag, Term
 
-class BagForm(forms.Form):
-    bag_name = forms.CharField(label="Name of the new BAG", max_length=100)
 
-
-class TermForm(forms.ModelForm):
-    class Meta:
-        model = Term
-        fields = ("name", "url", "bag")
+class AutofillBagForm(forms.Form):
+    url = forms.CharField(label="Url to scrappe", max_length=300)
+    parent_selector = forms.CharField(label="CSS Parent selector", max_length=100)
+    children_selector = forms.CharField(label="CSS Children selector", max_length=100, empty_value= "a")

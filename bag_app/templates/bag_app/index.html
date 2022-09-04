@@ -25,52 +25,62 @@
 </head>
 <body>
     <div class="fixed-animated-bg"></div>
-    <header class="main-header">
-        <h1 class="main-header__title">BRAIN BAG</h1>
-        <nav class="main-header__nav">
-        </nav>
-    </header>
-    <aside class="collections">
-        <a class="collections__add">C</a>
-        <hr/>
-        <a class="collections__item">A</a>
-        <a class="collections__item">B</a>
-    </aside>
-    <aside class="bag-actions">
-        <h2 class="bag-actions__title">Actions</h2>
-        <a class="bag-actions_add" href="{% url 'bags:add-bag' %}">Create bag</a>
-        <a href="{% url 'bags:add-term' %}"> New Term</a>
-        <a class="bag-actions__toggle" href="#">Show/hide disabled bags</a>        
-        <a class="bag-actions__search" href="#">Filter by bag name</a>
-    </aside>
-    <div class="bags">
-    {% for bag in bags %}
-        <div class="bag" >
-            <h2 class="bag__name"> {{ bag.name | title }}</h2>
-            <a class="bag__add-term" href="#"><span class="material-icons">add_circle</span></a>
-            <span alt="Bag svg" class="bag__svg material-symbols-outlined md-400" style="color: gold;">work</span>
-            <ul class="bag__terms">
-            {% for term in bag.term_set.all %}
-                <li class="bag__terms__item" >
-                    <span>
-                        {% if term.url != "" %}
-                            <a href="{{ term.url }}"> {{ term.name }}</a>
-                        {% else %}
-                        {{ term.name }}
-                        {% endif %}
-                    </span>
-                    <span><a href="{% url 'bags:update-term' term.id %}">️<span class="material-symbols-outlined">edit</span></a></span>
-                    <span>
-                        <form action="{% url 'bags:delete-term' term.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-delete-term"><span class="material-symbols-outlined red">delete</span><</button>
-                        </form>
-                    </span>
-                </li>
-            {% endfor %}
-            </ul>
+    <aside class="vertical-menu">
+        <header class="main-header">
+            <h1 class="main-header__title">BRAIN BAG</h1>
+        </header>
+        <div class="vertical-menu__columns">
+            <section class="vertical-menu__collections">
+                <a class="collections__add collections__item"></a>
+                <hr/>
+                <a class="collections__item"></a>
+                <a class="collections__item"></a>
+            </section>
+            <section class="vertical-menu__bag-actions">
+                <h2 class="bag-actions__title">Actions</h2>
+                <a class="bag-actions_add" href="{% url 'bags:add-bag' %}">Create bag</a>
+                <a href="{% url 'bags:add-term' %}"> New Term</a>
+                <a href="{% url 'bags:autofill' %}"> Autogenerate Bag</a>
+                <a class="bag-actions__toggle" href="#">Show/hide disabled bags</a>        
+                <a class="bag-actions__search" href="#">Filter by bag name</a>
+            </section>
         </div>
-        {% endfor %}
+    </aside>
+    <div class="bags-columns">
+    {% for bag_column in bags_columns %}
+        <div class="bags-columns__column">
+            {% for bag in bag_column %}
+                <div class="bag" >
+                    <header class="bag__header">
+                        <h2 class="bag__header__name"> {{ bag.name | title }}</h2>
+                    </header>
+                    <!-- <a class="bag__add-term" href="#"><span class="material-icons">add_circle</span></a> -->
+                    <section class="bag__body">
+                        <ul class="bag__body__terms">
+                            {% for term in bag.term_set.all %}
+                            <li class="bag__body__terms__item" >
+                                <span>
+                                    {% if term.url != "" %}
+                                    <a href="{{ term.url }}"> {{ term.name }}</a>
+                                    {% else %}
+                                    {{ term.name }}
+                                    {% endif %}
+                                </span>
+                                <span><a href="{% url 'bags:update-term' term.id %}">️<span class="material-symbols-outlined">edit</span></a></span>
+                                <span>
+                                    <form action="{% url 'bags:delete-term' term.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete-term"><span class="material-symbols-outlined red">delete</span></button>
+                                    </form>
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
     </div>
     </body>
 </html>
